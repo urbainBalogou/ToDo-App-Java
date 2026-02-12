@@ -12,17 +12,21 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.todoapp.dto.UserLoginDto;
 import com.example.todoapp.dto.UserRegistrationDto;
 import com.example.todoapp.model.User;
-import com.example.todoapp.service.UserService;
+import com.example.todoapp.service.UserRegistrationService;
+import com.example.todoapp.service.UserAuthenticationService;
 
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class UserController {
     
-    private final UserService userService;
+    private final UserRegistrationService userRegistrationService;
+    private final UserAuthenticationService userAuthenticationService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserRegistrationService userRegistrationService, 
+                         UserAuthenticationService userAuthenticationService) {
+        this.userRegistrationService = userRegistrationService;
+        this.userAuthenticationService = userAuthenticationService;
     }
 
     @GetMapping("/register")
@@ -35,7 +39,7 @@ public class UserController {
     public String register(@ModelAttribute("user") UserRegistrationDto registrationDto, 
                           RedirectAttributes redirectAttributes) {
         try {
-            userService.register(registrationDto);
+            userRegistrationService.register(registrationDto);
             redirectAttributes.addFlashAttribute("success", "Inscription réussie ! Vous pouvez maintenant vous connecter.");
             return "redirect:/login";
         } catch (RuntimeException e) {
@@ -54,7 +58,7 @@ public class UserController {
     public String login(@ModelAttribute("user") UserLoginDto loginDto, 
                        HttpSession session,
                        RedirectAttributes redirectAttributes) {
-        Optional<User> userOptional = userService.login(loginDto);
+        Optional<User> userOptional = userAuthenticationService.login(loginDto);
         
         if (userOptional.isPresent()) {
             session.setAttribute("currentUser", userOptional.get());

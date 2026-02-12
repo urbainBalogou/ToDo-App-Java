@@ -4,10 +4,12 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.example.todoapp.dto.UserLoginDto;
 import com.example.todoapp.model.User;
 
 
 @Service
-public interface UserService extends UserRegistrationService, UserAuthenticationService {
+public interface UserAuthenticationService {
+    Optional<User> login(UserLoginDto loginDto);
     Optional<User> findByEmail(String email);
 }

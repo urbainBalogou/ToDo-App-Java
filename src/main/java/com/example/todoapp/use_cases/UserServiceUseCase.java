@@ -9,32 +9,36 @@ import com.example.todoapp.dao.UserDao;
 import com.example.todoapp.dto.UserLoginDto;
 import com.example.todoapp.dto.UserRegistrationDto;
 import com.example.todoapp.model.User;
-import com.example.todoapp.service.UserService;
+import com.example.todoapp.service.UserAuthenticationService;
+import com.example.todoapp.service.UserRegistrationService;
+import com.example.todoapp.service.UserValidationService;
 
 @Service
-public class UserServiceUseCase implements UserService {
+public class UserServiceUseCase implements UserRegistrationService, UserAuthenticationService {
 
     private final UserDao userDao;
+    private final UserValidationService userValidationService;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceUseCase(UserDao userDao, PasswordEncoder passwordEncoder) {
+    public UserServiceUseCase(UserDao userDao, 
+                             UserValidationService userValidationService, 
+                             PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
+        this.userValidationService = userValidationService;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public User register(UserRegistrationDto registrationDto) {
-        // Vérifier si les mots de passe correspondent
-        if (!registrationDto.getPassword().equals(registrationDto.getConfirmPassword())) {
-            throw new RuntimeException("Les mots de passe ne correspondent pas !");
-        }
-
-        // Check if user already exists
-        if (userDao.existsByEmail(registrationDto.getEmail())) {
+        // Valider les données d'inscription
+        userValidationService.validateRegistrationData(registrationDto);
+        
+        // Vérifier si l'utilisateur existe déjà
+        if (emailExists(registrationDto.getEmail())) {
             throw new RuntimeException("Cet email est déjà utilisé !");
         }
 
-        // Create new user
+        // Créer un nouvel utilisateur
         User newUser = new User();
         newUser.setName(registrationDto.getName());
         newUser.setEmail(registrationDto.getEmail());
@@ -46,7 +50,7 @@ public class UserServiceUseCase implements UserService {
     @Override
     public Optional<User> login(UserLoginDto loginDto) {
         Optional<User> userOpt = userDao.findByEmail(loginDto.getEmail());
-        
+        System.out.println("User: " + userOpt); 
         if (userOpt.isPresent() && passwordEncoder.matches(loginDto.getPassword(), userOpt.get().getPassword())) {
             return userOpt;
         }
@@ -55,12 +59,12 @@ public class UserServiceUseCase implements UserService {
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        return userDao.findByEmail(email);
+    public boolean emailExists(String email) {
+        return userDao.existsByEmail(email);
     }
 
     @Override
-    public boolean emailExists(String email) {
-        return userDao.existsByEmail(email);
+    public Optional<User> findByEmail(String email) {
+        return userDao.findByEmail(email);
     }
 }

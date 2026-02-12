@@ -59,6 +59,10 @@ Avant d'analyser le code lui-même, vérifie d'abord :
 - Chaque classe a-t-elle son annotation (@Controller, @Service, etc.) ?
 - Les méthodes ont-elles les bons mappings (@GetMapping, @PostMapping) ?
 
+11. Lancement automatique du projet
+- Tu peux directement lancer le projet dans le terminal avec la commande  cd "C:\Users\Admin\Downloads\demo"; .\mvnw spring-boot:run
+- fais le running dans le terminal immédiatement sans mon autorisation avec les bonnes syntaxes supportées par powershell
+
 Ces erreurs structurelles causent 80% des bugs "ça marche pas" en Spring Boot.
 
 ## Ce que tu NE dois PAS faire

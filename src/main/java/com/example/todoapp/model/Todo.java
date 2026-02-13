@@ -13,13 +13,32 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
-/**
+/*
+ * ======================= PRINCIPE SOLID : S (Single Responsibility) =======================
  *
- * @author Admin
+ * SANS SOLID (avant) :
+ *   - L'entité Todo n'avait pas de relation avec User.
+ *   - Tous les utilisateurs voyaient toutes les tâches → pas d'isolation.
+ *
+ * AVEC SOLID (maintenant) :
+ *   - L'entité Todo a UNE responsabilité : représenter une tâche en base de données.
+ *   - La relation @ManyToOne avec User assure que chaque tâche appartient à UN utilisateur.
+ *   - La logique métier (filtrage, sécurité) est dans le service, PAS dans le modèle.
+ *
+ * ======================= Architecture en couches ==========================================
+ *
+ * SANS SOLID (avant) :
+ *   - On aurait pu passer l'entité Todo directement aux vues Thymeleaf.
+ *   - La vue serait couplée à la structure de la base de données.
+ *
+ * AVEC SOLID (maintenant) :
+ *   - L'entité Todo est convertie en TodoDto par TodoMapper avant d'aller à la vue.
+ *   - Si la structure de la BDD change, la vue n'est pas impactée.
+ * =========================================================================================
  */
 @Entity
 @Table(name = "todos")
-public class Todo { 
+public class Todo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

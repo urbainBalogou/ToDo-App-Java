@@ -13,6 +13,26 @@ import com.example.todoapp.dto.UserLoginDto;
 import com.example.todoapp.model.User;
 import com.example.todoapp.service.UserAuthenticationService;
 
+/*
+ * ======================= PRINCIPE SOLID : S (Single Responsibility) =======================
+ *
+ * SANS SOLID (avant) :
+ *   - Cette classe contenait login() ET findByEmail().
+ *   - Deux responsabilités : authentifier + rechercher des utilisateurs.
+ *
+ * AVEC SOLID (maintenant) :
+ *   - Cette classe ne fait QU'authentifier un utilisateur via login().
+ *   - findByEmail() a été déplacée dans UserQueryServiceImpl.
+ *   - Une seule raison de changer : si la logique d'authentification évolue.
+ *
+ * ======================= PRINCIPE SOLID : D (Dependency Inversion) =======================
+ *
+ * - Le contrôleur dépend de l'interface UserAuthenticationService (abstraction),
+ *   pas de cette classe concrète.
+ * - On pourrait remplacer l'implémentation (ex: auth LDAP, OAuth) sans
+ *   modifier le contrôleur.
+ * ==========================================================================================
+ */
 @Service
 public class UserAuthenticationServiceImpl implements UserAuthenticationService {
 
@@ -41,14 +61,6 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 
         log.debug("Login failed for email={}", loginDto.getEmail());
         return Optional.empty();
-    }
-
-    @Override
-    public Optional<User> findByEmail(String email) {
-        if (!StringUtils.hasText(email)) {
-            return Optional.empty();
-        }
-        return userDao.findByEmail(normalizeEmail(email));
     }
 
     private String normalizeEmail(String email) {

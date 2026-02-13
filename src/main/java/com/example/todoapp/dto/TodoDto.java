@@ -1,5 +1,19 @@
 package com.example.todoapp.dto;
 
+/*
+ * ======================= PRINCIPE SOLID : S (Single Responsibility) =======================
+ *
+ * SANS SOLID (avant) :
+ *   - On aurait passé l'entité Todo directement aux vues Thymeleaf.
+ *   - La vue connaîtrait la structure de la BDD (ex: le champ User, createdAt...).
+ *   - Si la BDD change → la vue casse.
+ *
+ * AVEC SOLID (maintenant) :
+ *   - TodoDto ne transporte QUE les données nécessaires à la vue (id, task, completed).
+ *   - Il ne contient PAS le champ User (donnée sensible/interne).
+ *   - La conversion Entity <-> DTO est gérée par TodoMapper (SRP).
+ * =========================================================================================
+ */
 public class TodoDto {
     private Long id;
     private String task;

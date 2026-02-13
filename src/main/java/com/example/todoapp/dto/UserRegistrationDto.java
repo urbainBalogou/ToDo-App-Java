@@ -1,5 +1,20 @@
 package com.example.todoapp.dto;
 
+/*
+ * ======================= PRINCIPE SOLID : I (Interface Segregation) =======================
+ *
+ * SANS SOLID (avant) :
+ *   - On aurait utilisé l'entité User pour le formulaire d'inscription.
+ *   - Le formulaire verrait le champ "id" et d'autres champs internes.
+ *   - Un seul objet User pour inscription ET connexion → champs inutiles exposés.
+ *
+ * AVEC SOLID (maintenant) :
+ *   - UserRegistrationDto ne contient QUE les champs du formulaire d'inscription
+ *     (name, email, password, confirmPassword).
+ *   - UserLoginDto est un DTO SÉPARÉ pour la connexion (email, password).
+ *   - Chaque DTO = exactement ce dont le formulaire a besoin, rien de plus (ISP).
+ * =========================================================================================
+ */
 public class UserRegistrationDto {
     private String name;
     private String email;

@@ -8,6 +8,30 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+/*
+ * ======================= PRINCIPE SOLID : S (Single Responsibility) =======================
+ *
+ * - Cette classe a UNE responsabilité : configurer la sécurité de l'application.
+ * - Elle ne contient PAS de logique métier (authentification, validation...).
+ *
+ * ======================= PRINCIPE SOLID : D (Dependency Inversion) =======================
+ *
+ * SANS SOLID (avant) :
+ *   - Les services auraient pu instancier directement new BCryptPasswordEncoder().
+ *   - Couplage fort avec BCrypt → impossible de changer l'algorithme facilement.
+ *
+ * AVEC SOLID (maintenant) :
+ *   - Le bean PasswordEncoder est défini ici et injecté via l'interface PasswordEncoder.
+ *   - Les services dépendent de PasswordEncoder (abstraction), pas de BCryptPasswordEncoder.
+ *   - Pour passer à Argon2, on change UNE ligne ici, sans toucher aux services.
+ *
+ * ======================= PRINCIPE SOLID : O (Open/Closed) ================================
+ *
+ * - La config est ouverte à l'extension (ajouter des filtres, des règles)
+ *   et fermée à la modification (on n'a pas besoin de modifier les services
+ *   pour changer la config de sécurité).
+ * =========================================================================================
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {

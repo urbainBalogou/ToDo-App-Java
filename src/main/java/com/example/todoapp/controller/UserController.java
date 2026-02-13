@@ -13,6 +13,7 @@ import com.example.todoapp.dto.UserLoginDto;
 import com.example.todoapp.dto.UserRegistrationDto;
 import com.example.todoapp.model.User;
 import jakarta.servlet.http.HttpSession;
+import com.example.todoapp.service.UserAuthenticationService;
 import com.example.todoapp.service.UserRegistrationService;
 
 @Controller

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.example.todoapp.controller;
 
 import org.springframework.stereotype.Controller;
@@ -12,14 +8,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.todoapp.dto.TodoDto;
+import com.example.todoapp.model.User;
 import com.example.todoapp.service.TodoService;
+import jakarta.servlet.http.HttpSession;
 
-/**
- *
- * @ author Admin
- */
 @Controller
 public class TodoController {
+
     private final TodoService todoService;
 
     public TodoController(TodoService todoService) {
@@ -27,25 +22,36 @@ public class TodoController {
     }
 
     @GetMapping("/")
-    public String index(Model model) {
-            model.addAttribute("todos", todoService.findAll());
-            model.addAttribute("newTodo", new TodoDto());
-            return "index";
+    public String index(Model model, HttpSession session) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("todos", todoService.findAllByUser(currentUser));
+        model.addAttribute("newTodo", new TodoDto());
+        model.addAttribute("userName", currentUser.getName());
+        return "index";
     }
-    
+
     @PostMapping("/add")
-    public String add(@ModelAttribute("newTodo") TodoDto newTodo) {
-        
-            if (newTodo != null && newTodo.getTask() != null && !newTodo.getTask().trim().isEmpty()) {
-                todoService.save(newTodo);
-            }
-            return "redirect:/";
-       
+    public String add(@ModelAttribute("newTodo") TodoDto newTodo, HttpSession session) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser == null) {
+            return "redirect:/login";
+        }
+        if (newTodo != null && newTodo.getTask() != null && !newTodo.getTask().trim().isEmpty()) {
+            todoService.save(newTodo, currentUser);
+        }
+        return "redirect:/";
     }
-    
+
     @PostMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) {
-            todoService.delete(id);
-            return "redirect:/";
+    public String delete(@PathVariable Long id, HttpSession session) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser == null) {
+            return "redirect:/login";
+        }
+        todoService.delete(id, currentUser);
+        return "redirect:/";
     }
 }

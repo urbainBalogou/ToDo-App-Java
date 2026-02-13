@@ -19,7 +19,8 @@ target/
 *.iws
 *.iml
 *.ipr
-
+.lingma/
+,claude
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

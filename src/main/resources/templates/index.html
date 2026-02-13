@@ -157,8 +157,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>✓ Ma liste de tâches</h1>
-        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h1 style="margin-bottom: 0;">Ma liste de tâches</h1>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="color: #666;" th:text="${userName}"></span>
+                <a th:href="@{/logout}" style="padding: 8px 16px; background: #ff6b6b; color: white; border-radius: 8px; text-decoration: none; font-size: 14px;">Déconnexion</a>
+            </div>
+        </div>
+
         <form th:action="@{/add}" method="post" th:object="${newTodo}" class="add-form">
             <input type="text" th:field="*{task}" placeholder="Ajouter une nouvelle tâche..." required>
             <button type="submit" class="btn-add">Ajouter</button>

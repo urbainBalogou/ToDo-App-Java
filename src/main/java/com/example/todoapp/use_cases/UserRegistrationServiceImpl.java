@@ -6,6 +6,7 @@ import org.springframework.util.StringUtils;
 
 import com.example.todoapp.dao.UserDao;
 import com.example.todoapp.dto.UserRegistrationDto;
+import com.example.todoapp.exception.EmailAlreadyExistsException;
 import com.example.todoapp.model.User;
 import com.example.todoapp.service.UserRegistrationService;
 import com.example.todoapp.service.UserValidationService;
@@ -31,7 +32,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         userValidationService.validateRegistrationData(registrationDto);
 
         if (emailExists(registrationDto.getEmail())) {
-            throw new RuntimeException("Cet email est déjà utilisé !");
+            throw new EmailAlreadyExistsException("Cet email est déjà utilisé !");
         }
 
         User newUser = new User();

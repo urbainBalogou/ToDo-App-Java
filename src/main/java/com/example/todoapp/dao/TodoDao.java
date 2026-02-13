@@ -4,15 +4,15 @@
  */
 package com.example.todoapp.dao;
 
+import java.util.List;
+
 import com.example.todoapp.model.Todo;
+import com.example.todoapp.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-/**
- *
- * @author Admin
- */
 @Repository
 public interface TodoDao extends JpaRepository<Todo, Long>  {
-    
+    List<Todo> findByUser(User user);
+    List<Todo> findByUserId(Long userId);
 }

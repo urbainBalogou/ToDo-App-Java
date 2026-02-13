@@ -43,7 +43,6 @@ public class Todo {
         this.task = task;
     }
 
-    // Tous les getters et setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     

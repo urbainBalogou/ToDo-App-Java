@@ -12,10 +12,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.todoapp.dto.UserLoginDto;
 import com.example.todoapp.dto.UserRegistrationDto;
 import com.example.todoapp.model.User;
-import com.example.todoapp.service.UserRegistrationService;
-import com.example.todoapp.service.UserAuthenticationService;
-
 import jakarta.servlet.http.HttpSession;
+import com.example.todoapp.service.UserRegistrationService;
 
 @Controller
 public class UserController {

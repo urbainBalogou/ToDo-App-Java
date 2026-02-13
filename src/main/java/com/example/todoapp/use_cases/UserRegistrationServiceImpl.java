@@ -10,6 +10,7 @@ import com.example.todoapp.model.User;
 import com.example.todoapp.service.UserRegistrationService;
 import com.example.todoapp.service.UserValidationService;
 
+
 @Service
 public class UserRegistrationServiceImpl implements UserRegistrationService {
 

@@ -22,17 +22,19 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/login", "/register").permitAll()
-                 .anyRequest().authenticated() 
+                .anyRequest().authenticated()
             )
-            .csrf(csrf -> csrf.disable())// Désactive CSRF pour simplifier
+            .csrf(csrf -> csrf.disable())
             .formLogin(form -> form
-            .loginPage("/login")
-            .defaultSuccessUrl("/", true)
-            .permitAll()
-        )
-        .logout(logout -> logout
-            .logoutSuccessUrl("/login?logout")
-        );
+                .loginPage("/login")
+                .defaultSuccessUrl("/", true)
+                .permitAll()
+            )
+            .logout(logout -> logout
+                .logoutSuccessUrl("/login?logout")
+                .permitAll()
+            );
+        
         return http.build();
     }
 }
